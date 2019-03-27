@@ -55,7 +55,7 @@ const resolvers = {
     },
     deleteItem: (parent, {rowKeys}) => {
       for (var j = 0; j < rowKeys.length; j ++)
-        delete bankItems [row.id];
+        delete bankItems [rowKeys [j]];
       return rowKeys.length;
     }
   }
