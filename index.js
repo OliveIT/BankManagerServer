@@ -1,6 +1,6 @@
 const { ApolloServer, gql } = require('apollo-server');
 
-let bankItems = [];
+let bankItems = {};
 
 // The GraphQL schema
 const typeDefs = gql`
@@ -41,29 +41,21 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     bankItems: () => {
-      return bankItems;
+      return Object.values(bankItems);
     },
   },
   Mutation: {
     createItem: (parent, {row}) => {
-      bankItems.push(row);
+      bankItems [row.id] = row;
       return row;
     },
     updateItem: (parent, {row}) => {
-      for (var i = 0; i < bankItems.length; i ++)
-        if (bankItems [i].id == row.id) {
-          bankItems [i] = row;
-          break;
-        }
+      bankItems [row.id] = row;
       return row;
     },
     deleteItem: (parent, {rowKeys}) => {
-      for (var i = bankItems.length - 1; i >= 0; i --)
-        for (var j = 0; j < rowKeys.length; j ++)
-          if (bankItems [i].id == rowKeys [j]) {
-            delete bankItems [i];
-            break;
-          }
+      for (var j = 0; j < rowKeys.length; j ++)
+        delete bankItems [row.id];
       return rowKeys.length;
     }
   }
